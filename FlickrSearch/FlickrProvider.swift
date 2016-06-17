@@ -20,12 +20,12 @@ class FlickrProvider {
         static let invalidAccessErrorCode = 100
     }
     
-    class func fetchPhotosForSearchText(searchText: String, onCompletion: FlickrResponse) -> Void {
+    class func fetchPhotosForSearchText(_ searchText: String, onCompletion: FlickrResponse) -> Void {
         
-        let escapedSearchText: String = searchText.stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())!
+        let escapedSearchText: String = searchText.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
         let urlString: String = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=\(Keys.flickrKey)&tags=\(escapedSearchText)&per_page=25&format=json&nojsoncallback=1"
-        let url: NSURL = NSURL(string: urlString)!
-        let searchTask = NSURLSession.sharedSession().dataTaskWithURL(url, completionHandler: {data, response, error -> Void in
+        let url: URL = URL(string: urlString)!
+        let searchTask = URLSession.shared().dataTask(with: url, completionHandler: {data, response, error -> Void in
             
             if error != nil {
                 print("Error fetching photos: \(error)")
@@ -34,7 +34,7 @@ class FlickrProvider {
             }
             
             do {
-                let resultsDictionary = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? [String: AnyObject]
+                let resultsDictionary = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: AnyObject]
                 
                 guard let results = resultsDictionary else { return }
                 

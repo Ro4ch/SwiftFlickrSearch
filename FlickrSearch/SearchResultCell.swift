@@ -14,9 +14,9 @@ class SearchResultCell: UITableViewCell {
     @IBOutlet weak var resultTitleLabel: UILabel!
     @IBOutlet weak var resultImageView: UIImageView!
     
-    func setupWithPhoto(flickrPhoto: FlickrPhoto) {
+    func setupWithPhoto(_ flickrPhoto: FlickrPhoto) {
         resultTitleLabel.text = flickrPhoto.title
-        resultImageView.sd_setImageWithURL(flickrPhoto.photoUrl)
+        resultImageView.sd_setImage(with: flickrPhoto.photoUrl as URL!)
     }
     
 }
